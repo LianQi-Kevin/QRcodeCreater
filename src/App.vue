@@ -1,5 +1,5 @@
 <script setup>
-import QRCode from 'qrcode'
+import {toDataURL} from 'qrcode'
 import {Setting} from "@element-plus/icons-vue";
 import QRCodeCard from "@/components/QRCodeCard.vue";
 import {ElMessage} from "element-plus";
@@ -32,7 +32,7 @@ async function QRCodeCreator() {
     resultList.push({
       id: generateUUID4(),
       text: strRef.value,
-      img: await QRCode.toDataURL(strRef.value, generateOptions)
+      img: await toDataURL(strRef.value, generateOptions)
     })
 
     strRef.value = ""    // 创建后清理输入框
@@ -99,8 +99,6 @@ async function QRCodeCreator() {
 
 <style lang="scss" scoped>
 .content {
-  width: 100vw;
-  height: 100vh;
   background-color: var(--el-bg-color);
 
   display: flex;

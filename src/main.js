@@ -1,10 +1,8 @@
-import {createApp} from "vue";
-
-import "/src/style.css";
-import App from "/src/App.vue";
-
-// to support element style
-import "/node_modules/element-plus/theme-chalk/dark/css-vars.css"
+import {createApp} from 'vue';
+import './style.css';
+import App from './App.vue';
+// to support element dark style
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 // 创建vue实例
 const app = createApp(App);

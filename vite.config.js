@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
+import electron from 'vite-plugin-electron'
 import Inspect from 'vite-plugin-inspect'
 
 const pathSrc = path.resolve(__dirname, 'src')
@@ -19,6 +20,12 @@ export default {
     extensions: [".js", ".ts", ".json", ".vue"],
   },
   plugins: [
+    electron({
+      include: [
+        // The Electron source codes directory
+        'electron',
+      ],
+    }),
     vue(),
     AutoImport({
       // Auto import functions from Vue, e.g. ref, reactive, toRef...
