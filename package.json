@@ -2,20 +2,24 @@
   "name": "qrcodecreater",
   "private": true,
   "version": "0.0.0",
+  "main": "dist-electron/index.js",
   "type": "module",
-  "main": "electron/index.js",
   "author": {
     "name": "LianQi",
     "url": "https://lianqidev.cn"
   },
   "description": "A sleek desktop application for creating QR codes.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LianQi-Kevin/QRcodeCreater"
+  },
+  "license": "MIT",
   "scripts": {
     "vite:dev": "vite",
     "vite:build": "vite build",
     "vite:preview": "vite preview",
     "electron:start": "electron --trace-warnings .",
-    "electron:build": "vite build && electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "electron:build": "vite build && electron-builder"
   },
   "build": {
     "productName": "QRCodeCreator",
@@ -24,6 +28,7 @@
       "output": "build"
     },
     "win": {
+      "icon": "public/icon.png",
       "target": [
         "portable"
       ],
@@ -49,7 +54,8 @@
     "unplugin-icons": "^0.18.2",
     "unplugin-vue-components": "^0.26.0",
     "vite": "^5.0.8",
-    "vite-plugin-electron": "^0.15.6",
+    "vite-plugin-electron": "^0.28.0",
+    "vite-plugin-electron-renderer": "^0.14.5",
     "vite-plugin-inspect": "^0.8.1"
   }
 }

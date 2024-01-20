@@ -99,6 +99,9 @@ async function QRCodeCreator() {
 
 <style lang="scss" scoped>
 .content {
+  width: 100%;
+  height: 100%;
+
   background-color: var(--el-bg-color);
 
   display: flex;

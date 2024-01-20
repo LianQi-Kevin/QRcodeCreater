@@ -5,7 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import electron from 'vite-plugin-electron'
+import electron from 'vite-plugin-electron/simple'
 import Inspect from 'vite-plugin-inspect'
 
 const pathSrc = path.resolve(__dirname, 'src')
@@ -20,13 +20,19 @@ export default {
     extensions: [".js", ".ts", ".json", ".vue"],
   },
   plugins: [
-    electron({
-      include: [
-        // The Electron source codes directory
-        'electron',
-      ],
-    }),
     vue(),
+    electron({
+      main: {
+        // Shortcut of `build.lib.entry`
+        entry: 'electron/index.js',
+      },
+      // preload: {
+      //   // Shortcut of `build.rollupOptions.input`
+      //   input: 'electron/preload.ts',
+      // },
+      // Optional: Use Node.js API in the Renderer process
+      renderer: {},
+    }),
     AutoImport({
       // Auto import functions from Vue, e.g. ref, reactive, toRef...
       // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
