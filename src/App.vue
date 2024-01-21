@@ -1,17 +1,16 @@
 <script setup>
 import {toDataURL} from 'qrcode'
-import {Setting} from "@element-plus/icons-vue";
-import QRCodeCard from "@/components/QRCodeCard.vue";
 import {ElMessage} from "element-plus";
+
+import QRCodeCard from "@/components/QRCodeCard.vue";
+import QRCodeOptions from "@/components/QRCodeOptions.vue";
 import {generateUUID4} from  "@/utils/UUID.js";
 
 const strRef = ref('')
 const generateOptions = reactive({
-  width: 300,
-  height: 300,
-  colorDark: '#000000',    //二维码颜色
-  colorLight: "#ffffff",  //背景颜色
-  // correctLevel : QRCode.CorrectLevel.H  // 容错级别 L,M,Q,H
+  size: 100,
+  colorDark: '#ffffff',
+  colorLight: '#000000'
 })
 
 const resultList = reactive([])
@@ -61,27 +60,7 @@ async function QRCodeCreator() {
       <el-button @click="QRCodeCreator" size="large" class="submit">Generate</el-button>
     </div>
     <div class="options">
-      <el-collapse accordion>
-        <el-collapse-item title="Options" name="1">
-          <template #title>
-            <el-icon class="icon"><Setting /></el-icon> Options
-          </template>
-          <el-form :model="generateOptions" label-position="left" label-width="80px">
-            <el-form-item label="Width">
-              <el-input-number v-model="generateOptions.width" :min="100" :max="1000" :step="50"/>
-            </el-form-item>
-            <el-form-item label="Height">
-              <el-input-number v-model="generateOptions.height" :min="100" :max="1000" :step="50"/>
-            </el-form-item>
-            <el-form-item label="ColorDark">
-              <el-color-picker v-model="generateOptions.colorDark"/>
-            </el-form-item>
-            <el-form-item label="ColorLight">
-              <el-color-picker v-model="generateOptions.colorLight"/>
-            </el-form-item>
-          </el-form>
-        </el-collapse-item>
-      </el-collapse>
+      <QRCodeOptions :generate-options="generateOptions"/>
     </div>
     <div class="result">
       <el-empty description="Please enter text and click generate button" v-if="resultList.length === 0" />
@@ -143,11 +122,6 @@ async function QRCodeCreator() {
   .options {
     margin-top: 10px;
     width: 80%;
-
-    .icon {
-      margin-left: 5px;
-      margin-right: 5px;
-    }
   }
 
   .result {
