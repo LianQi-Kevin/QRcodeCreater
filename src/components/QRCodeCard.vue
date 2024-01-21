@@ -1,5 +1,6 @@
 <script setup>
 import {Download} from "@element-plus/icons-vue";
+
 const props = defineProps({
   text: {
     type: String,
@@ -11,15 +12,10 @@ const props = defineProps({
   }
 })
 
-function downloadQRCode() {
-  const date = new Date();
-  const timestamp = date.toISOString().replace(/[:\-]|(\.\d{3})/g, ''); // 将日期转换为YYYYMMDDHHmmss格式
-  const link = document.createElement('a');
-  link.href = props.img;
-  link.download = `QRCode_${timestamp}.png`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+function getDate() {
+  return new Date().toISOString()
+    .replace(/[\-:]/g, '')  // 移除短横线和冒号
+    .replace(/\.\d{3}/, ''); // 移除秒后的毫秒部分
 }
 </script>
 
@@ -39,9 +35,11 @@ function downloadQRCode() {
       </div>
       <template #footer>
         <div class="card-header">
-          <el-button text @click="downloadQRCode">
-            <el-icon style="padding-right: 5px"><Download /></el-icon> Download QRCode
-          </el-button>
+          <el-link :underline="false" :href="props.img" target="_blank" :download="`QRCode_${getDate()}.png`">
+            <el-button text>
+              <el-icon style="padding-right: 5px"><Download /></el-icon> Download QRCode
+            </el-button>
+          </el-link>
         </div>
       </template>
     </el-card>

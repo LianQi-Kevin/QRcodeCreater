@@ -3,7 +3,6 @@ import {toDataURL} from 'qrcode'
 import {Setting} from "@element-plus/icons-vue";
 import QRCodeCard from "@/components/QRCodeCard.vue";
 import {ElMessage} from "element-plus";
-import 'element-plus/es/components/message/style/css'
 import {generateUUID4} from  "@/utils/UUID.js";
 
 const strRef = ref('')
@@ -35,7 +34,7 @@ async function QRCodeCreator() {
       img: await toDataURL(strRef.value, generateOptions)
     })
 
-    strRef.value = ""    // 创建后清理输入框
+    // strRef.value = ""    // 创建后清理输入框
   } catch (e) {
     ElMessage({
       message: e,
@@ -86,7 +85,7 @@ async function QRCodeCreator() {
     </div>
     <div class="result">
       <el-empty description="Please enter text and click generate button" v-if="resultList.length === 0" />
-      <el-scrollbar v-else max-height="550px">
+      <el-scrollbar v-else max-height="max(calc(100vh - 300px), 350px)">
         <div class="result_sub">
           <div v-for="card in resultList" :key="card.id" class="result_row">
             <QRCodeCard :text="card.text" :img="card.img" />
@@ -102,7 +101,7 @@ async function QRCodeCreator() {
   width: 100%;
   height: 100%;
 
-  background-color: var(--el-bg-color);
+  //background-color: var(--el-bg-color);
 
   display: flex;
   flex-direction: column;
