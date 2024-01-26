@@ -1,5 +1,4 @@
 <script setup>
-import {toDataURL} from 'qrcode'
 import {ElMessage} from "element-plus";
 
 import QRCodeCard from "@/components/QRCodeCard.vue";
@@ -7,11 +6,8 @@ import QRCodeOptions from "@/components/QRCodeOptions.vue";
 import {generateUUID4} from  "@/utils/UUID.js";
 
 const strRef = ref('')
-const generateOptions = reactive({
-  size: 100,
-  colorDark: '#ffffff',
-  colorLight: '#000000'
-})
+
+const generateOptions = ref()
 
 const resultList = reactive([])
 
@@ -26,11 +22,10 @@ async function QRCodeCreator() {
       return;  // 提前退出函数
     }
     console.debug(`Create Text: ${strRef.value}`)
-    // todo: generateOptions需休整
     resultList.push({
       id: generateUUID4(),
       text: strRef.value,
-      img: await toDataURL(strRef.value, generateOptions)
+      options: toRaw(generateOptions.value.generateOptions),
     })
 
     // strRef.value = ""    // 创建后清理输入框
@@ -49,25 +44,19 @@ async function QRCodeCreator() {
     <p class="title"> QRCode Generator </p>
     <p class="distribution"> Enter a URL or text to generate a QRCode </p>
     <div class="generate">
-      <el-input
-        v-model="strRef"
-        class="url_input"
-        clearable
-        placeholder="Enter the content for the QRCode"
-        :autofocus="true"
-        @keyup.enter="QRCodeCreator"
-      />
+      <el-input v-model="strRef" class="url_input" placeholder="Enter the content for the QRCode"
+                :autofocus="true" @keyup.enter="QRCodeCreator" clearable/>
       <el-button @click="QRCodeCreator" size="large" class="submit">Generate</el-button>
     </div>
     <div class="options">
-      <QRCodeOptions :generate-options="generateOptions"/>
+      <QRCodeOptions ref="generateOptions"/>
     </div>
     <div class="result">
       <el-empty description="Please enter text and click generate button" v-if="resultList.length === 0" />
-      <el-scrollbar v-else max-height="max(calc(100vh - 300px), 350px)">
+      <el-scrollbar v-else max-height="max(calc(100vh - 300px), 370px)">
         <div class="result_sub">
-          <div v-for="card in resultList" :key="card.id" class="result_row">
-            <QRCodeCard :text="card.text" :img="card.img" />
+          <div v-for="card in resultList" :key="card.id">
+            <QRCodeCard :text="card.text" :options="card.options" />
           </div>
         </div>
       </el-scrollbar>
@@ -79,8 +68,6 @@ async function QRCodeCreator() {
 .content {
   width: 100%;
   height: 100%;
-
-  //background-color: var(--el-bg-color);
 
   display: flex;
   flex-direction: column;
@@ -131,16 +118,8 @@ async function QRCodeCreator() {
     .result_sub {
       display: flex;
       flex-flow: row wrap;
-      gap: 10px;
-      justify-content: space-evenly;
-
-      //max-height: ;
-      overflow-y: auto;
-    }
-
-    .result_title {
-      text-align: left;
-      color: var(--el-text-color-primary);
+      justify-content: center;
+      gap: 15px;
     }
   }
 }

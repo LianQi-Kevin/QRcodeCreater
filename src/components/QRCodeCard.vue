@@ -1,4 +1,6 @@
 <script setup>
+import {AwesomeQR} from "awesome-qr";
+
 import {Download} from "@element-plus/icons-vue";
 
 const props = defineProps({
@@ -6,10 +8,25 @@ const props = defineProps({
     type: String,
     required: true
   },
-  img: {
-    type: String,
-    required: true
+  options: {
+    type: Object,
+    required: false,
   }
+})
+
+const dataURL = ref('');
+
+async function CreateQRCode(text, options) {
+  const Options = {
+    ...{text: text},
+    ...(options !== undefined ? options : {})
+  };
+  return await new AwesomeQR(Options).draw();
+}
+
+
+onMounted(async () => {
+  dataURL.value = await CreateQRCode(props.text, props.options);
 })
 
 function getDate() {
@@ -23,22 +40,18 @@ function getDate() {
   <div class="content">
     <el-card class="box-card">
       <div>
-        <el-image
-          :src="props.img"
-          :alt="props.text"
-          fit="cover"
-          loading="lazy"
-        />
+        <el-image :src="dataURL" :alt="props.text" :zoom-rate="2" :max-scale="7" :min-scale="0.2"
+                  :preview-src-list="[dataURL]" :initial-index="1" fit="cover" loading="lazy"/>
         <el-tooltip :content="props.text" placement="top">
           <el-text class="distribution" type="info" size="small" truncated>{{props.text}}</el-text>
         </el-tooltip>
       </div>
       <template #footer>
-        <div class="card-header">
-          <el-link :underline="false" :href="props.img" target="_blank" :download="`QRCode_${getDate()}.png`">
-            <el-button text>
-              <el-icon style="padding-right: 5px"><Download /></el-icon> Download QRCode
-            </el-button>
+        <div>
+          <el-link :underline="false" :href="dataURL"
+                   target="_blank" :download="`QRCode_${getDate()}.png`"
+                   class="downloadLink">
+            <el-icon style="padding-right: 5px"><Download /></el-icon> Download QRCode
           </el-link>
         </div>
       </template>
@@ -48,44 +61,36 @@ function getDate() {
 </template>
 
 <style>
-/* 重写element-ui部分样式 */
+/* 覆盖element-ui部分样式 */
 .el-card__body {
-  padding: 15px 15px 0;
+  padding: 10px 10px 0;
 }
 
 .el-card__footer {
-  padding: 5px 10px 5px 10px;
+  padding: 5px;
 }
 </style>
 
 <style scoped lang="scss">
 .content {
-  border: var(--el-border);
-  height: 270px;
   max-height: 270px;
-  width: 210px;
-  max-width: 210px;
+  max-width: 180px;
 
   display: flex;
   flex-direction: column;
   gap: 15px;
 
-  //padding: 10px;
-  padding: 0;
-
   .box-card {
     width: 100%;
-    height: 100%;
 
     .el-image {
-      width: 180px;
-      height: 180px;
+      width: 160px;
+      height: 160px;
     }
-  }
 
-
-  .distribution {
-    word-wrap:break-word;
+    .downloadLink {
+      width: 100%;
+    }
   }
 }
 </style>

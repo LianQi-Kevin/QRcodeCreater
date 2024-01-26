@@ -19,7 +19,8 @@
     "vite:build": "tsc --noEmit && vite build",
     "vite:preview": "vite preview",
     "electron:start": "electron --trace-warnings .",
-    "electron:build": "tsc --noEmit && vite build && electron-builder"
+    "electron:build": "tsc --noEmit && vite build && electron-builder",
+    "electron:postinstall": "electron-builder install-app-deps"
   },
   "build": {
     "productName": "QRCodeCreator",
@@ -42,8 +43,8 @@
   ],
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "awesome-qr": "^2.1.5-rc.0",
     "element-plus": "^2.5.1",
-    "qrcode": "^1.5.3",
     "vue": "^3.3.11"
   },
   "devDependencies": {
